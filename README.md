@@ -6,7 +6,7 @@
 
 Can molecular structure predict how a compound changes cellular signaling? This project investigates that question using LINCS L1000 gene-expression signatures from A549 human lung adenocarcinoma cells exposed to compounds at **10 µM for 24 hours**.
 
-The analysis converts gene-expression signatures into transcriptionally inferred activity scores for 14 signaling pathways using PROGENy. After molecular-structure curation and adjustment for experimental block effects, Morgan fingerprints and pretrained CheMeleon embeddings are used to predict pathway responses for previously unseen molecular structures.
+The analysis converts gene-expression signatures into transcriptionally inferred activity scores for 14 signaling pathways using PROGENy. After molecular-structure curation and adjustment for experimental block effects, Morgan fingerprints and pretrained CheMeleon embeddings are used to predict pathway responses.
 
 ## Data
 
@@ -27,10 +27,9 @@ The pathways are Androgen, EGFR, Estrogen, Hypoxia, JAK–STAT, MAPK, NF-κB, PI
 
 1. **Curate molecular structures.** Recover missing or incomplete SMILES annotations from earlier LINCS records and PubChem, standardize structures using RDKit and `chembl_structure_pipeline`, and audit stereochemical annotations. Assign a common structure identifier to records with identical standardized structures.
 2. **Infer pathway responses.** Apply PROGENy through decoupler using the 100 highest-ranked responsive genes per pathway to produce a 14-dimensional response vector for each expression signature.
-3. **Split at the structure level.** Allocate 1,045 structures to training, 224 to validation, and 225 to testing. Keep all observations of an identical standardized structure in the same partition.
-4. **Adjust experimental block effects.** Average signatures within each structure–block combination and estimate pathway-specific block effects using a ridge-regularized additive model. Estimate adjustments and select shrinkage penalties using training data alone, freeze the adjustments, and average adjusted responses equally across available blocks for each structure.
-5. **Encode molecular structures.** Generate chirality-aware Morgan fingerprints with radius 2 and 2,048 bits, and 2,048-dimensional embeddings from the frozen pretrained CheMeleon encoder.
-6. **Fit and evaluate predictive models.** Compare linear and nonlinear regression methods using held-out performance. Standardize pathway responses and CheMeleon features using training-set statistics.
+3. **Adjust experimental block effects.** Average signatures within each structure–block combination and estimate pathway-specific block effects using a ridge-regularized additive model. Estimate adjustments and select shrinkage penalties, and average adjusted responses equally across available blocks for each structure.
+4. **Encode molecular structures.** Generate chirality-aware Morgan fingerprints with radius 2 and 2,048 bits, and 2,048-dimensional embeddings from the frozen pretrained CheMeleon encoder.
+5. **Fit and evaluate predictive models.** Compare linear and nonlinear regression methods using held-out performance. Standardize pathway responses and CheMeleon features using training-set statistics.
 
 ## Predictive Results
 
@@ -42,8 +41,6 @@ The pathways are Androgen, EGFR, Estrogen, Hypoxia, JAK–STAT, MAPK, NF-κB, PI
 | Morgan | Tanimoto kernel ridge regression | 0.102 | 0.969 |
 | Morgan | Ridge regression | 0.079 | 0.983 |
 | CheMeleon | Ridge regression | 0.052 | 1.002 |
-
-Mean test R² is the average across the 14 pathways. Standardized root mean squared error (sRMSE) scales prediction errors by each pathway's training-set standard deviation; lower values indicate better performance.
 
 The best-performing approach combined CheMeleon embeddings with pathway-specific RBF kernel ridge regression. Its test R² varied across pathways, reaching **0.361 for MAPK**, **0.303 for EGFR**, and **0.222 for p53**. Overall performance was modest, and most response variability remained unexplained by the evaluated models.
 
