@@ -1,6 +1,6 @@
 # Predicting Compound-Induced Pathway Responses from Molecular Structure
 
-**Yike Xu | Independent Research Project | Summer 2026**
+**Blake Xu**
 
 ## Overview
 
