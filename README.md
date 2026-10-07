@@ -2,8 +2,6 @@
 
 **Yike Xu | Independent Research Project | Summer 2026**
 
-[Read the full report](<report(5)(2).pdf>)
-
 ## Overview
 
 Can molecular structure predict how a compound changes cellular signaling? This project investigates that question using LINCS L1000 gene-expression signatures from A549 human lung adenocarcinoma cells exposed to compounds at **10 µM for 24 hours**.
